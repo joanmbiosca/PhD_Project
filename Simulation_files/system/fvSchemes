@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5                                     |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         Euler;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+    grad(p)         cellLimited Gauss linear 0.5;
+    grad(U)         cellMDLimited Gauss linear 1;
+
+}
+
+
+divSchemes
+{
+    default         none;
+    div((interpolate(beta_t)*phi),U)      Gauss linearUpwind grad(U);
+    div((interpolate(beta_t)*phi),epsilon) Gauss linearUpwind grad(U);
+    div((interpolate(beta_t)*phi),k)      Gauss linearUpwind grad(U);
+    div(phi,k)      Gauss upwind;
+    div(phi,epsilon) Gauss upwind;
+    div(phi,omega)  Gauss upwind;
+    div(phi,R)      Gauss upwind;
+    div(R)          Gauss upwind;
+    div(phi,nuTilda) Gauss upwind;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+
+    div(devRhoReff)  Gauss linear; 
+    div(((beta_t*nuEff)*dev2(T(grad(U))))) Gauss linear;
+    div(phi,U)      Gauss linearUpwind grad(U);
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+    laplacian(DT,alpha) Gauss linear limited 0.5;
+    laplacian(DT,Fp) Gauss linear limited 0.5;
+    laplacian(nuEff,U)		 Gauss linear corrected;
+    laplacian(((beta_t*beta_t)*(1|max(((1|(1|A(U)))-H(1)),(0.1|(1|A(U)))))),p)	Gauss linear corrected;
+    laplacian(DepsilonEff,epsilon)  Gauss linear limited 1;
+    laplacian(DkEff,k)		 Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+    interpolate(U)  linear;
+    alpha           cellPoint;
+    U               cellPoint;
+    grad(p)         cellPoint;
+    div(devRhoReff) cellPoint;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+
+// ************************************************************************* //

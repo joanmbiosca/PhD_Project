@@ -1,0 +1,146 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5                                     |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        relTol          0;
+        maxIter		50;
+        minIter		2;
+        smoother        GaussSeidel;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 100;
+        mergeLevels     1;
+    }
+
+    pFinal
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        relTol          0;
+        maxIter		200;
+        minIter		2;
+        smoother        GaussSeidel;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 100;
+        mergeLevels     1;
+    }
+
+    "(U)"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-06;
+        relTol          0;
+        minIter		2;
+        maxIter		30;
+    }
+
+    "(k|epsilon|omega|R|nuTilda)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-06;
+        relTol          0;
+        minIter		2;
+        maxIter		200;
+    }
+
+    "(U)Final"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-07;
+        relTol          0;
+        minIter		2;
+        maxIter		200;
+    }
+
+    "(k|epsilon)Final"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-06;
+        relTol          0;
+        minIter		2;
+        maxIter		200;
+    }
+    alpha
+    {
+        solver          PBiCGStab;
+        preconditioner  DIC;
+        tolerance       1e-6;
+        relTol          0;
+    }
+
+    Fp
+    {
+        solver          PBiCGStab;
+        preconditioner  DIC;
+        tolerance       1e-6;
+        relTol          0;
+    }
+
+
+}
+
+PIMPLE
+{
+    correctPhi          no;
+    nOuterCorrectors 2; //5
+    nCorrectors     1; //1
+    nNonOrthogonalCorrectors 1; //1
+    pRefCell        0;
+    pRefValue       0;
+
+    turbOnFinalIterOnly 	false;
+    consistent	    yes;
+}
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 1;
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p		0.8;
+	pFinal		0.8;
+    }
+    equations
+    {
+        U		0.8;
+	UFinal		0.8;
+        k		0.8;
+	kFinal		0.8;
+	epsilon		0.8;
+        epsilonFinal	0.8;
+    }
+ }
+
+// ************************************************************************* //
