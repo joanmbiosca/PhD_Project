@@ -1,6 +1,6 @@
 # RBC Deformation Study Through Microchips
 
-This repository should contain the Mpacts-OpenFoam simulations for the **Immersed Boundary Method (IBM)** coupling between an Mpacts object (Red Blood cell in this case) and a laminar fluid. Due to Mpacts code belongs to KU Leuven, this repository only contains the geometries and the OpenFoam Laminar fluid code. 
+This repository should contain the Mpacts-OpenFoam simulations for the **Immersed Boundary Method (IBM)** coupling between an Mpacts object (Red Blood cell in this case) and a laminar fluid. Due to the Mpacts code belonging to KU Leuven, this repository only contains the geometries and the OpenFoam Laminar fluid code. 
 
 ![ImmersedImage](Images/image.png)
 
@@ -29,7 +29,7 @@ $$
 
 considering $R$ as the radius of the channel, $\Delta P$ as the pressure drop along the pipe, $L$ as the length of the channel and $\eta$ as the dynamic viscosity. For different geometries see [PoiseuilleFlow](https://en.wikipedia.org/wiki/Hagen%E2%80%93Poiseuille_equation). For more information on how to compute Poiseuille Flow in OpenFoam visit: [Tutorial_Poiseuille](http://www.wolfdynamics.com/wiki/tut_hagen_poiseuille.pdf)
 
-The coupling handles the force from the cells and the velocity from the fluid to build up a bridge between CFD and cells. Via Lagrangian (Mpacts)-Eulerian (CFD) description the simulation is able to solve Navier-Stokes equation, update the velocity field, transfer this to the Lagrangian points, interpolate the new positions of the MPACTS nodes, calculate the forces from the nodes, couple back this forces to the Eulerian fluid and use them in the next timestep to solve again N-S equations.
+The coupling handles the force from the cells and the velocity from the fluid to build up a bridge between CFD and cells. Via Lagrangian (Mpacts)-Eulerian (CFD) description the simulation is able to solve Navier-Stokes equation, update the velocity field, transfer this to the Lagrangian points, interpolate the new positions of the MPACTS nodes, calculate the forces from the nodes, couple back this forces to the Eulerian fluid and use them in the next timestep to solve N-S equations again.
 
 **How to use**
 
